@@ -120,7 +120,7 @@ h1, h2, h3, h4, h5, h6 {
   border: var(--border-width-thick) solid var(--color-border);
   box-shadow: var(--shadow-flat);
   cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
   user-select: none;
 }
 
@@ -132,6 +132,13 @@ h1, h2, h3, h4, h5, h6 {
 .neo-btn:active {
   transform: translate(2px, 2px);
   box-shadow: var(--shadow-flat-active);
+}
+
+.neo-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: var(--shadow-flat);
 }
 
 .neo-btn-primary {
@@ -257,7 +264,20 @@ h1, h2, h3, h4, h5, h6 {
   height: 3px;
   background-color: var(--color-text-main);
   margin: 5px 0;
-  transition: 0.3s;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  transform-origin: center;
+}
+
+.mobile-nav-toggle.active span:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+
+.mobile-nav-toggle.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.mobile-nav-toggle.active span:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
 }
 
 /* Hero Section */
@@ -453,6 +473,12 @@ h1, h2, h3, h4, h5, h6 {
   display: flex;
   flex-direction: column;
   position: relative;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.bento-card:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: var(--shadow-flat-hover);
 }
 
 .bento-card-large {
@@ -468,6 +494,11 @@ h1, h2, h3, h4, h5, h6 {
 .bento-card-tall {
   grid-column: span 2;
   grid-row: span 2;
+}
+
+.bento-card-sidebar {
+  grid-column: span 2;
+  grid-row: 1 / -1;
 }
 
 .bento-card-wide {
@@ -487,6 +518,11 @@ h1, h2, h3, h4, h5, h6 {
   object-fit: cover;
   border-bottom: var(--border-width-thick) solid var(--color-border);
   background-color: #f3f4f6;
+  transition: transform 0.4s ease;
+}
+
+.bento-card:hover .project-card-image {
+  transform: scale(1.05);
 }
 
 .project-card-content {
@@ -554,6 +590,10 @@ h1, h2, h3, h4, h5, h6 {
   justify-content: space-between;
 }
 
+.stats-card:hover {
+  background-color: #009ad6;
+}
+
 .stats-number {
   font-family: var(--font-heading);
   font-size: 64px;
@@ -575,6 +615,10 @@ h1, h2, h3, h4, h5, h6 {
   justify-content: center;
   background-color: #000000;
   color: #ffffff;
+}
+
+.quote-card:hover {
+  background-color: #1a1a1a;
 }
 
 .quote-text {
@@ -652,7 +696,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .skill-card:hover {
-  transform: translateY(-4px);
+  transform: translate(-2px, -2px);
   box-shadow: var(--shadow-flat-hover);
   background-color: #f8fafc;
 }
@@ -694,7 +738,6 @@ h1, h2, h3, h4, h5, h6 {
   padding: 56px;
   max-width: 900px;
   margin: 0 auto;
-  border-radius: 32px;
 }
 
 .contact-grid {
@@ -839,6 +882,10 @@ h1, h2, h3, h4, h5, h6 {
   .bento-card-wide {
     grid-column: span 4;
   }
+  .bento-card-sidebar {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
   .bento-card-small {
     grid-column: span 2;
   }
@@ -898,6 +945,10 @@ h1, h2, h3, h4, h5, h6 {
     grid-column: span 1;
     grid-row: span 2;
   }
+  .bento-card-sidebar {
+    grid-column: span 2;
+    grid-row: span 1;
+  }
   .bento-card-wide {
     grid-column: span 2;
   }
@@ -931,9 +982,16 @@ h1, h2, h3, h4, h5, h6 {
   .about-details {
     grid-template-columns: 1fr;
   }
+  .contact-card {
+    padding: 24px;
+  }
   .bento-grid {
     grid-template-columns: 1fr;
     grid-auto-rows: auto;
+  }
+  .bento-card-sidebar {
+    grid-column: span 1 !important;
+    grid-row: span 1 !important;
   }
   .bento-card {
     grid-column: span 1 !important;

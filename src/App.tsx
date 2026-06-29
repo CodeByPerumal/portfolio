@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './index.css';
 
 // Import images
@@ -10,6 +10,7 @@ function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -17,14 +18,35 @@ function App() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  // Track active section on scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = ['home', 'about', 'projects', 'skills'];
+      const scrollPos = window.scrollY + 120;
+      for (let i = sections.length - 1; i >= 0; i--) {
+        const el = document.getElementById(sections[i]);
+        if (el && el.offsetTop <= scrollPos) {
+          setActiveSection(sections[i]);
+          break;
+        }
+      }
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (formData.name && formData.email && formData.message) {
-      setFormSubmitted(true);
+      setIsSubmitting(true);
       setTimeout(() => {
-        setFormSubmitted(false);
-        setFormData({ name: '', email: '', message: '' });
-      }, 3000);
+        setFormSubmitted(true);
+        setIsSubmitting(false);
+        setTimeout(() => {
+          setFormSubmitted(false);
+          setFormData({ name: '', email: '', message: '' });
+        }, 3000);
+      }, 800);
     }
   };
 
@@ -101,7 +123,7 @@ function App() {
           </a>
 
           <button 
-            className="mobile-nav-toggle" 
+            className={`mobile-nav-toggle ${mobileMenuOpen ? 'active' : ''}`} 
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle Navigation Menu"
           >
@@ -212,7 +234,7 @@ function App() {
             </div>
 
             {/* Stats Bento Card */}
-            <div className="neo-card bento-card bento-card-medium stats-card">
+            <div className="neo-card bento-card bento-card-sidebar stats-card">
               <div>
                 <span className="stats-label">Projects</span>
                 <div className="stats-number">20+</div>
@@ -220,6 +242,10 @@ function App() {
               <div>
                 <span className="stats-label">Happy Clients</span>
                 <div className="stats-number">99%</div>
+              </div>
+              <div>
+                <span className="stats-label">Avg. NPS Score</span>
+                <div className="stats-number">92</div>
               </div>
             </div>
 
@@ -260,7 +286,7 @@ function App() {
             </div>
 
             {/* Project 2 - Horizon SaaS */}
-            <div className="neo-card bento-card bento-card-large" style={{ gridColumn: 'span 4' }}>
+            <div className="neo-card bento-card bento-card-large">
               <img src={projectSaasImg} alt="SaaS Web Mockup" className="project-card-image" />
               <div className="project-card-content">
                 <div>
@@ -429,8 +455,8 @@ function App() {
                         placeholder="How can I help you?"
                       />
                     </div>
-                    <button type="submit" className="neo-btn neo-btn-primary">
-                      Send Message
+                    <button type="submit" className="neo-btn neo-btn-primary" disabled={isSubmitting}>
+                      {isSubmitting ? 'Sending...' : 'Send Message'}
                     </button>
                   </form>
                 )}
